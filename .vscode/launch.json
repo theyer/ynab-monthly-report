@@ -1,0 +1,28 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Current File",
+      "request": "launch",
+      "mainClass": "${file}"
+    },
+    {
+      "type": "java",
+      "name": "Runner",
+      "request": "launch",
+      "mainClass": "com.ynabmonthlyreport.Runner",
+      "projectName": "src.main.java.com.ynabmonthlyreport:runner"
+    },
+    {
+      "type": "java",
+      "name": "Runner(1)",
+      "request": "launch",
+      "mainClass": "com.ynabmonthlyreport.Runner",
+      "projectName": "ynab-monthly-report_9b21586a"
+    }
+  ]
+}

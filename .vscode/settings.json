@@ -1,0 +1,27 @@
+{
+  "bazel.projectview.open": false,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    ".eclipse": false,
+    ".git": true,
+    "src": false,
+    "bazel-bin": true,
+    "bazel-testlogs": true,
+    "bazel-out": true,
+    "bazel-ynab-monthly-report": true,
+    ".vscode": false
+  },
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true,
+    "**/.hg/store/**": true,
+    "**/ynab-monthly-report/!(.eclipse|.vscode|src)/**": true
+  }
+}

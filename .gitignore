@@ -1,0 +1,3 @@
+bazel-*
+.eclipse/projects
+src/main/resources/ynab_monthly_report_config.json
