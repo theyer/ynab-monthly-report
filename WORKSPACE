@@ -25,6 +25,7 @@ maven_install(
         "com.fasterxml.jackson.core:jackson-annotations:2.14.0",
         "com.fasterxml.jackson.core:jackson-databind:2.15.3",
         "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3",
+        "com.sun.mail:javax.mail:1.6.2",
         "javax.annotation:javax.annotation-api:1.3.2",
     ],
     repositories = [

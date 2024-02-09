@@ -4,6 +4,7 @@ java_binary(
     main_class = "com.ynabmonthlyreport.Runner",
     data = ["//src/main/resources"],
     deps = [
+        "//src/main/java/com/ynabmonthlyreport/email",
         "//src/main/java/com/ynabmonthlyreport/model",
         "//src/main/java/com/ynabmonthlyreport/model/config",
         "//src/main/java/com/ynabmonthlyreport/model/month",

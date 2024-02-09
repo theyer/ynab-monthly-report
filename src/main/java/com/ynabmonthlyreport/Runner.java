@@ -2,6 +2,7 @@ package com.ynabmonthlyreport;
 
 import static com.ynabmonthlyreport.model.Constants.CONFIG_FILENAME;
 
+import com.ynabmonthlyreport.email.SendEmailTask;
 import com.ynabmonthlyreport.model.JsonConversionUtils;
 import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig;
 import com.ynabmonthlyreport.model.month.BudgetMonthData;
@@ -42,6 +43,9 @@ public class Runner {
     ReportAssembler reportAssembler = new ReportAssembler(config);
     String report = reportAssembler.getAssembledReport(budgetMonth);
     System.out.println(report);
+
+    SendEmailTask emailTask = new SendEmailTask(config);
+    emailTask.sendEmail(report);
   }
 
   private static YnabMonthlyReportConfig loadConfig() {

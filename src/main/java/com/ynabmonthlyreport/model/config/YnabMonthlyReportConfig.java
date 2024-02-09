@@ -12,6 +12,10 @@ import javax.annotation.Generated;
 "api_key",
 "budget_id",
 "budget_month",
+"email_send_from_name",
+"email_send_from_address",
+"email_send_from_password",
+"email_send_to_addresses",
 "savings_categories",
 "ignored_categories"
 })
@@ -24,6 +28,14 @@ public String apiKey;
 public String budgetId;
 @JsonProperty("budget_month")
 public LocalDate budgetMonth;
+@JsonProperty("email_send_from_name")
+public String emailSendFromName;
+@JsonProperty("email_send_from_address")
+public String emailSendFromAddress;
+@JsonProperty("email_send_from_password")
+public String emailSendFromPassword;
+@JsonProperty("email_send_to_addresses")
+public List<String> emailSendToAddresses;
 @JsonProperty("savings_categories")
 public List<String> savingsCategories;
 @JsonProperty("ignored_categories")
