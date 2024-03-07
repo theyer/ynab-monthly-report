@@ -61,6 +61,8 @@ public class TransactionData {
   public boolean approved;
   @JsonProperty("flag_color")
   public String flagColor;
+  @JsonProperty("flag_name")
+  public String flagName;
   @JsonProperty("account_id")
   public String accountId;
   @JsonProperty("payee_id")
