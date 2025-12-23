@@ -2,7 +2,6 @@ package com.ynabmonthlyreport.scheduler;
 
 import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig;
 import com.ynabmonthlyreport.model.month.BudgetMonthData;
-import com.ynabmonthlyreport.model.month.CategoryData;
 import com.ynabmonthlyreport.model.transaction.TransactionData;
 import com.ynabmonthlyreport.ynab.YnabFetcher;
 import java.io.IOException;

@@ -14,7 +14,8 @@
     "bazel-testlogs": true,
     "bazel-out": true,
     "bazel-ynab-monthly-report": true,
-    ".vscode": true
+    ".vscode": true,
+    "__pycache__": true
   },
   "java.configuration.updateBuildConfiguration": "disabled",
   "files.watcherExclude": {

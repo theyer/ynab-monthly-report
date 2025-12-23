@@ -11,8 +11,9 @@ public class ReportAssembler {
   private List<BaseReportGenerator> generators;
 
   public ReportAssembler(YnabMonthlyReportConfig config) {
-    this.generators = List.of(new MonthlySpendingReportGenerator(config), new NonMonthlySpendingReportGenerator(config),
-        new SavingsReportGenerator(config), new NoGoalReportGenerator(config));
+    this.generators = List.of(new MonthlySpendingReportGenerator(config),
+        new NonMonthlySpendingReportGenerator(config), new SavingsReportGenerator(config),
+        new NoGoalReportGenerator(config));
   }
 
   public String getAssembledReport(BudgetMonthData budgetMonth) {
@@ -27,8 +28,7 @@ public class ReportAssembler {
     }
     reportBuilder.append("\n");
 
-    reportBuilder.append(generators.stream()
-        .map(generator -> generator.generate(budgetMonth))
+    reportBuilder.append(generators.stream().map(generator -> generator.generate(budgetMonth))
         .collect(Collectors.joining("\n\n")));
 
     return reportBuilder.toString();
