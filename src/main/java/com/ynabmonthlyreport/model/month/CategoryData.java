@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.time.LocalDate;
+import java.time.Instant;
 import javax.annotation.Generated;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -19,6 +20,7 @@ import javax.annotation.Generated;
     "activity",
     "balance",
     "goal_type",
+    "goal_needs_whole_amount",
     "goal_day",
     "goal_cadence",
     "goal_cadence_frequency",
@@ -30,6 +32,7 @@ import javax.annotation.Generated;
     "goal_under_funded",
     "goal_overall_funded",
     "goal_overall_left",
+    "goal_snoozed_at",
     "deleted"
 })
 @Generated("jsonschema2pojo")
@@ -71,6 +74,7 @@ public class CategoryData {
     TBD, // Target Category Balance by Date
     MF, // Monthly Funding
     NEED, // Plan Your Spending
+    DEBT,
   }
   public GoalType goalType;
   @JsonProperty("goal_type")
@@ -78,6 +82,8 @@ public class CategoryData {
     this.goalType = goalTypeStr == null ? GoalType.NO_GOAL : GoalType.valueOf(goalTypeStr);
   }
 
+  @JsonProperty("goal_needs_whole_amount")
+  public boolean goalNeedsWholeAmount;
   @JsonProperty("goal_day")
   public long goalDay;
 
@@ -130,6 +136,8 @@ public class CategoryData {
   public long goalOverallFunded;
   @JsonProperty("goal_overall_left")
   public long goalOverallLeft;
+  @JsonProperty("goal_snoozed_at")
+  public Instant goalSnoozedAt;
   @JsonProperty("deleted")
   public boolean deleted;
 

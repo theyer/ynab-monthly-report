@@ -4,9 +4,9 @@
     "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,
-    "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
+    "**/CVS": true,
     ".eclipse": false,
     ".git": true,
     "src": false,
@@ -14,7 +14,7 @@
     "bazel-testlogs": true,
     "bazel-out": true,
     "bazel-ynab-monthly-report": true,
-    ".vscode": false
+    ".vscode": true
   },
   "java.configuration.updateBuildConfiguration": "disabled",
   "files.watcherExclude": {
@@ -22,6 +22,6 @@
     "**/.git/subtree-cache/**": true,
     "**/node_modules/*/**": true,
     "**/.hg/store/**": true,
-    "**/ynab-monthly-report/!(.eclipse|.vscode|src)/**": true
+    "**/!(.eclipse|src)/**": true
   }
 }

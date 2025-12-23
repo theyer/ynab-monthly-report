@@ -44,9 +44,7 @@ public class Scheduler {
     }
 
     if (budgetMonth.categories.stream()
-        .filter(category -> category.goalTarget != 0 && CategoryData.GoalType.NEED.equals(category.goalType)
-            && (CategoryData.GoalCadence.MONTHLY.equals(category.goalCadence)
-                || CategoryData.GoalCadence.NONE.equals(category.goalCadence)))
+        .filter(category -> config.balanceZeroedMonthlyCategoryGroups.contains(category.categoryGroupName))
         .anyMatch(category -> category.balance != 0)) {
       return ScheduleReportOutcome.SPENDING_BALANCES_NOT_EMPTY;
     }

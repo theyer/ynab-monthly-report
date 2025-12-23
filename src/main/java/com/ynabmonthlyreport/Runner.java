@@ -43,9 +43,11 @@ public class Runner {
     ReportAssembler reportAssembler = new ReportAssembler(config);
     String report = reportAssembler.getAssembledReport(budgetMonth);
     System.out.println(report);
-
-    SendEmailTask emailTask = new SendEmailTask(config);
-    emailTask.sendEmail(report);
+    
+    if (config.enableEmailReport) {
+      SendEmailTask emailTask = new SendEmailTask(config);
+      emailTask.sendEmail(report);
+    }
   }
 
   private static YnabMonthlyReportConfig loadConfig() {
