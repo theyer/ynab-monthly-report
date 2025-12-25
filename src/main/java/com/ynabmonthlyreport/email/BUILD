@@ -1,11 +1,11 @@
-load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 
-java_library(
+kt_jvm_library(
     name = "email",
-    srcs = glob(["*.java"]),
+    srcs = glob(["*.kt"]),
+    visibility = ["//src/main/java/com/ynabmonthlyreport:__pkg__"],
     deps = [
         "//src/main/java/com/ynabmonthlyreport/model/config",
         "@maven//:com_sun_mail_javax_mail",
     ],
-    visibility = ["//src/main/java/com/ynabmonthlyreport:__pkg__"],
 )

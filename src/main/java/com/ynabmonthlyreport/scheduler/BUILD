@@ -1,8 +1,8 @@
-load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 
-java_library(
+kt_jvm_library(
     name = "scheduler",
-    srcs = glob(["*.java"]),
+    srcs = glob(["*.kt"]),
     visibility = ["//src/main/java/com/ynabmonthlyreport:__pkg__"],
     deps = [
         "//src/main/java/com/ynabmonthlyreport/model",

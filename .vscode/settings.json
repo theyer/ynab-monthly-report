@@ -24,5 +24,6 @@
     "**/node_modules/*/**": true,
     "**/.hg/store/**": true,
     "**/!(.eclipse|src)/**": true
-  }
+  },
+  "java.server.launchMode": "Standard"
 }
