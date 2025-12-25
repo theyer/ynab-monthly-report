@@ -1,35 +1,32 @@
-package com.ynabmonthlyreport.report;
+package com.ynabmonthlyreport.report
 
-import static com.ynabmonthlyreport.model.Constants.FAILURE_ICON;
-import static com.ynabmonthlyreport.model.Constants.SUCCESS_ICON;
+import com.ynabmonthlyreport.model.Constants.FAILURE_ICON
+import com.ynabmonthlyreport.model.Constants.SUCCESS_ICON
+import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig
+import com.ynabmonthlyreport.model.month.CategoryData
+import kotlin.math.abs
 
-import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig;
-import com.ynabmonthlyreport.model.month.CategoryData;
+internal class SavingsReportGenerator(config: YnabMonthlyReportConfig) : BaseReportGenerator(config) {
+  override val title = "------ Savings Report ------"
 
-class SavingsReportGenerator extends BaseReportGenerator {
-
-  SavingsReportGenerator(YnabMonthlyReportConfig config) {
-    super(config);
+  override fun filterCategory(category: CategoryData): Boolean {
+    return category.name in config.savingsCategories
   }
 
-  @Override
-  String title() {
-    return "------ Savings Report ------";
-  }
+  override fun generateSingleCategory(category: CategoryData): String {
+    val budgetedToGoal = category.budgeted >= category.goalTarget
+    val saveDiff = abs(category.budgeted - category.goalTarget)
 
-  @Override
-  boolean filterCategory(CategoryData category) {
-    return config.savingsCategories.contains(category.name);
-  }
-
-  @Override
-  String generateSingleCategory(CategoryData category) {
-    boolean budgetedToGoal = category.budgeted >= category.goalTarget;
-    long saveDiff = Math.abs(category.budgeted - category.goalTarget);
-
-    String icon = budgetedToGoal ? SUCCESS_ICON : FAILURE_ICON;
-    String overOrUnder = budgetedToGoal ? "over" : "under";
-    return String.format("%s %s: $%d %s goal (Goal: $%d, Budgeted: $%d)", icon, category.name, saveDiff, overOrUnder,
-        category.goalTarget, category.budgeted);
+    val icon: String = if (budgetedToGoal) SUCCESS_ICON else FAILURE_ICON
+    val overOrUnder = if (budgetedToGoal) "over" else "under"
+    return String.format(
+      "%s %s: $%d %s goal (Goal: $%d, Budgeted: $%d)",
+      icon,
+      category.name,
+      saveDiff,
+      overOrUnder,
+      category.goalTarget,
+      category.budgeted
+    )
   }
 }

@@ -1,12 +1,9 @@
-load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 
 package(default_visibility = ["//visibility:public"])
 
-java_library(
-  name = "config",
-  srcs = glob(["*.java"]),
-  deps = [
-    "@maven//:com_fasterxml_jackson_core_jackson_annotations",
-    "@maven//:javax_annotation_javax_annotation_api",
-  ],
+kt_jvm_library(
+    name = "config",
+    srcs = glob(["*.kt"]),
+    deps = [],
 )

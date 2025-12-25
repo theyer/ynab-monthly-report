@@ -1,23 +1,13 @@
-package com.ynabmonthlyreport.scheduler;
+package com.ynabmonthlyreport.scheduler
 
-import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig;
-import com.ynabmonthlyreport.model.month.BudgetMonthData;
-import com.ynabmonthlyreport.model.transaction.TransactionData;
-import com.ynabmonthlyreport.ynab.YnabFetcher;
-import java.io.IOException;
-import java.util.List;
+import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig
+import com.ynabmonthlyreport.model.month.BudgetMonthData
+import com.ynabmonthlyreport.model.transaction.TransactionData
+import com.ynabmonthlyreport.ynab.YnabFetcher
+import java.io.IOException
 
-public class Scheduler {
-
-  private final YnabMonthlyReportConfig config;
-  private final YnabFetcher ynabFetcher;
-
-  public Scheduler(YnabMonthlyReportConfig config, YnabFetcher ynabFetcher) {
-    this.config = config;
-    this.ynabFetcher = ynabFetcher;
-  }
-
-  public enum ScheduleReportOutcome {
+class Scheduler(private val config: YnabMonthlyReportConfig, private val ynabFetcher: YnabFetcher) {
+  enum class ScheduleReportOutcome {
     READY_TO_SCHEDULE,
     TO_BE_BUDGETED_NOT_EMPTY,
     SPENDING_BALANCES_NOT_EMPTY,
@@ -27,42 +17,37 @@ public class Scheduler {
     DATA_FETCH_ERROR,
   }
 
-  public ScheduleReportOutcome readyToScheduleReport() {
-    BudgetMonthData budgetMonth = null;
-    List<TransactionData> transactions = null;
-    try {
-      budgetMonth = ynabFetcher.fetchBudgetMonthData();
-      transactions = ynabFetcher.fetchTransactionData();
-    } catch (IOException | InterruptedException e) {
-      System.err.println(e.toString());
-      return ScheduleReportOutcome.DATA_FETCH_ERROR;
+  fun readyToScheduleReport(): ScheduleReportOutcome {
+    val budgetMonth: BudgetMonthData = try {
+      ynabFetcher.fetchBudgetMonthData()
+    } catch (e: Exception) {
+      return handleFetchError(e)
+    }
+    val transactions: List<TransactionData> = try {
+      ynabFetcher.fetchTransactionData()
+    } catch (e: Exception) {
+      return handleFetchError(e)
     }
 
-    if (budgetMonth.toBeBudgeted != 0) {
-      return ScheduleReportOutcome.TO_BE_BUDGETED_NOT_EMPTY;
+    return when {
+      budgetMonth.toBeBudgeted != 0L -> ScheduleReportOutcome.TO_BE_BUDGETED_NOT_EMPTY
+      budgetMonth.categories.asSequence().filter { it.categoryGroupName in config.balanceZeroedMonthlyCategoryGroups }
+        .any { it.balance != 0L } -> ScheduleReportOutcome.SPENDING_BALANCES_NOT_EMPTY
+      budgetMonth.categories.asSequence().filter { it.name !in config.ignoredCategories }
+        .any { it.balance < 0 } -> ScheduleReportOutcome.NEGATIVE_BALANCES
+      transactions.any { it.cleared == TransactionData.ClearedStatus.UNCLEARED } -> ScheduleReportOutcome.TRANSACTIONS_UNCLEARED
+      transactions.any { !it.approved } -> ScheduleReportOutcome.TRANSACTIONS_NOT_APPROVED
+      else -> ScheduleReportOutcome.READY_TO_SCHEDULE
     }
+  }
 
-    if (budgetMonth.categories.stream()
-        .filter(category -> config.balanceZeroedMonthlyCategoryGroups.contains(category.categoryGroupName))
-        .anyMatch(category -> category.balance != 0)) {
-      return ScheduleReportOutcome.SPENDING_BALANCES_NOT_EMPTY;
+  private fun handleFetchError(e: Exception): ScheduleReportOutcome {
+    when (e) {
+      is IOException, is InterruptedException -> {
+        System.err.println(e.toString())
+        return ScheduleReportOutcome.DATA_FETCH_ERROR
+      }
+      else -> throw e
     }
-
-    if (budgetMonth.categories.stream()
-        .filter(category -> !config.ignoredCategories.contains(category.name))
-        .anyMatch(category -> category.balance < 0)) {
-      return ScheduleReportOutcome.NEGATIVE_BALANCES;
-    }
-
-    if (transactions.stream()
-        .anyMatch(transaction -> TransactionData.ClearedStatus.UNCLEARED.equals(transaction.clearedStatus))) {
-      return ScheduleReportOutcome.TRANSACTIONS_UNCLEARED;
-    }
-
-    if (transactions.stream().anyMatch(transaction -> !transaction.approved)) {
-      return ScheduleReportOutcome.TRANSACTIONS_NOT_APPROVED;
-    }
-
-    return ScheduleReportOutcome.READY_TO_SCHEDULE;
   }
 }

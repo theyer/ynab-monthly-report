@@ -1,10 +1,10 @@
-load("@rules_java//java:defs.bzl", "java_binary") 
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
 
-java_binary(
+kt_jvm_binary(
     name = "runner",
-    srcs = ["Runner.java"],
-    main_class = "com.ynabmonthlyreport.Runner",
+    srcs = ["Runner.kt"],
     data = ["//src/main/resources"],
+    main_class = "com.ynabmonthlyreport.Runner",
     deps = [
         "//src/main/java/com/ynabmonthlyreport/email",
         "//src/main/java/com/ynabmonthlyreport/model",

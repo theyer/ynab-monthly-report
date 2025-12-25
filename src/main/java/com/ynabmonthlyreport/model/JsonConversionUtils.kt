@@ -1,48 +1,52 @@
-package com.ynabmonthlyreport.model;
+package com.ynabmonthlyreport.model
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig;
-import com.ynabmonthlyreport.model.month.BudgetMonthData;
-import com.ynabmonthlyreport.model.transaction.TransactionData;
-import java.util.Arrays;
-import java.util.List;
+import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig
+import com.ynabmonthlyreport.model.month.BudgetMonthData
+import com.ynabmonthlyreport.model.transaction.TransactionData
+import tools.jackson.core.JacksonException
+import tools.jackson.databind.JsonNode
+import tools.jackson.databind.PropertyNamingStrategies
+import tools.jackson.databind.json.JsonMapper
+import tools.jackson.module.kotlin.KotlinFeature
+import tools.jackson.module.kotlin.jsonMapper
+import tools.jackson.module.kotlin.kotlinModule
+import tools.jackson.module.kotlin.readValue
+import tools.jackson.module.kotlin.treeToValue
 
-public class JsonConversionUtils {
-
-  public static BudgetMonthData convertBudgetMonthJson(String json) {
-    ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-
+object JsonConversionUtils {
+  fun convertBudgetMonthJson(json: String?): BudgetMonthData {
     try {
-      JsonNode rootNode = objectMapper.readTree(json);
-      JsonNode budgetMonthNode = rootNode.get("data").get("month");
-      return objectMapper.treeToValue(budgetMonthNode, BudgetMonthData.class);
-    } catch (JsonProcessingException e) {
-      throw new IllegalArgumentException(e);
+      val rootNode: JsonNode = MAPPER.readTree(json)
+      val budgetMonthNode: JsonNode = rootNode.get("data").get("month")
+      return MAPPER.treeToValue<BudgetMonthData>(budgetMonthNode)
+    } catch (e: JacksonException) {
+      throw IllegalArgumentException(e)
     }
   }
 
-  public static List<TransactionData> convertTransactionsJson(String json) {
-    ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-
+  fun convertTransactionsJson(json: String?): List<TransactionData> {
     try {
-      JsonNode rootNode = objectMapper.readTree(json);
-      JsonNode transactionsNode = rootNode.get("data").get("transactions");
-      return Arrays.asList(objectMapper.treeToValue(transactionsNode, TransactionData[].class));
-    } catch (JsonProcessingException e) {
-      throw new IllegalArgumentException(e);
+      val rootNode: JsonNode = MAPPER.readTree(json)
+      val transactionsNode: JsonNode = rootNode.get("data").get("transactions")
+      return MAPPER.treeToValue<List<TransactionData>>(transactionsNode)
+    } catch (e: JacksonException) {
+      throw IllegalArgumentException(e)
     }
   }
 
-  public static YnabMonthlyReportConfig convertConfigJson(String json) {
-    ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-
-    try {
-      return objectMapper.readValue(json, YnabMonthlyReportConfig.class);
-    } catch (JsonProcessingException e) {
-      throw new IllegalArgumentException(e);
+  fun convertConfigJson(json: String): YnabMonthlyReportConfig {
+    return try {
+      MAPPER.readValue<YnabMonthlyReportConfig>(json)
+    } catch (e: JacksonException) {
+      throw IllegalArgumentException(e)
     }
+  }
+
+  private val MAPPER: JsonMapper = jsonMapper {
+    addModule(kotlinModule {
+      enable(KotlinFeature.NullToEmptyCollection)
+      enable(KotlinFeature.NullToEmptyMap)
+    })
+    propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
   }
 }

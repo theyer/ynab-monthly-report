@@ -1,36 +1,31 @@
-package com.ynabmonthlyreport.report;
+package com.ynabmonthlyreport.report
 
-import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig;
-import com.ynabmonthlyreport.model.month.BudgetMonthData;
-import java.time.format.TextStyle;
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
+import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig
+import com.ynabmonthlyreport.model.month.BudgetMonthData
+import java.time.format.TextStyle
+import java.util.Locale
 
-public class ReportAssembler {
-  private List<BaseReportGenerator> generators;
+class ReportAssembler(config: YnabMonthlyReportConfig) {
+  private val generators: List<BaseReportGenerator> = listOf(
+    MonthlySpendingReportGenerator(config),
+    NonMonthlySpendingReportGenerator(config),
+    SavingsReportGenerator(config),
+    NoGoalReportGenerator(config)
+  )
 
-  public ReportAssembler(YnabMonthlyReportConfig config) {
-    this.generators = List.of(new MonthlySpendingReportGenerator(config),
-        new NonMonthlySpendingReportGenerator(config), new SavingsReportGenerator(config),
-        new NoGoalReportGenerator(config));
-  }
+  fun getAssembledReport(budgetMonth: BudgetMonthData): String {
+    val month = budgetMonth.month.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
+    val year = budgetMonth.month.year
 
-  public String getAssembledReport(BudgetMonthData budgetMonth) {
-    String month = budgetMonth.month.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-    int year = budgetMonth.month.getYear();
-
-    StringBuilder reportBuilder = new StringBuilder();
-    reportBuilder.append(month + " " + year + "\n");
-    if (budgetMonth.note != null && !budgetMonth.note.isEmpty()) {
-      reportBuilder.append("Notes:\n");
-      reportBuilder.append(budgetMonth.note + "\n");
+    val reportBuilder = StringBuilder()
+    reportBuilder.append("$month $year\n")
+    if (budgetMonth.note?.isNotEmpty() ?: false) {
+      reportBuilder.append("Notes:\n")
+      reportBuilder.append("${budgetMonth.note}\n")
     }
-    reportBuilder.append("\n");
+    reportBuilder.append("\n")
 
-    reportBuilder.append(generators.stream().map(generator -> generator.generate(budgetMonth))
-        .collect(Collectors.joining("\n\n")));
-
-    return reportBuilder.toString();
+    reportBuilder.append(generators.asSequence().map { it.generate(budgetMonth) }.joinToString("\n\n"))
+    return reportBuilder.toString()
   }
 }

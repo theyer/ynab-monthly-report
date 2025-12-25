@@ -1,35 +1,21 @@
-package com.ynabmonthlyreport.report;
+package com.ynabmonthlyreport.report
 
-import static com.ynabmonthlyreport.model.Constants.FAILURE_ICON;
-import static com.ynabmonthlyreport.model.Constants.SUCCESS_ICON;
+import com.ynabmonthlyreport.model.Constants.FAILURE_ICON
+import com.ynabmonthlyreport.model.Constants.SUCCESS_ICON
+import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig
+import com.ynabmonthlyreport.model.month.CategoryData
 
-import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig;
-import com.ynabmonthlyreport.model.month.CategoryData;
+internal class NoGoalReportGenerator(config: YnabMonthlyReportConfig) : BaseReportGenerator(config) {
+  override val title = "------ Misc Report ------"
 
-class NoGoalReportGenerator extends BaseReportGenerator {
-
-  NoGoalReportGenerator(YnabMonthlyReportConfig config) {
-    super(config);
+  override fun filterCategory(category: CategoryData): Boolean {
+    return category.goalTarget == 0L && category.name !in config.savingsCategories && category.name !in config.ignoredCategories && !category.hidden
   }
 
-  @Override
-  String title() {
-    return "------ Misc Report ------";
-  }
+  override fun generateSingleCategory(category: CategoryData): String {
+    val hasSpending = category.activity > 0
 
-  @Override
-  boolean filterCategory(CategoryData category) {
-    return category.goalTarget == 0
-        && !config.savingsCategories.contains(category.name)
-        && !config.ignoredCategories.contains(category.name)
-        && !category.hidden;
-  }
-
-  @Override
-  String generateSingleCategory(CategoryData category) {
-    boolean hasSpending = category.activity > 0;
-
-    String icon = hasSpending ? FAILURE_ICON : SUCCESS_ICON;
-    return String.format("%s %s: $%d spent", icon, category.name, category.activity);
+    val icon: String = if (hasSpending) FAILURE_ICON else SUCCESS_ICON
+    return String.format("%s %s: $%d spent", icon, category.name, category.activity)
   }
 }

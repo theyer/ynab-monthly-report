@@ -1,62 +1,61 @@
-package com.ynabmonthlyreport;
+package com.ynabmonthlyreport
 
-import static com.ynabmonthlyreport.model.Constants.CONFIG_FILENAME;
+import com.ynabmonthlyreport.email.SendEmailTask
+import com.ynabmonthlyreport.model.Constants.CONFIG_FILENAME
+import com.ynabmonthlyreport.model.JsonConversionUtils
+import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig
+import com.ynabmonthlyreport.model.month.BudgetMonthData
+import com.ynabmonthlyreport.report.ReportAssembler
+import com.ynabmonthlyreport.scheduler.Scheduler
+import com.ynabmonthlyreport.ynab.YnabFetcher
+import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.Paths
+import kotlin.system.exitProcess
 
-import com.ynabmonthlyreport.email.SendEmailTask;
-import com.ynabmonthlyreport.model.JsonConversionUtils;
-import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig;
-import com.ynabmonthlyreport.model.month.BudgetMonthData;
-import com.ynabmonthlyreport.report.ReportAssembler;
-import com.ynabmonthlyreport.scheduler.Scheduler;
-import com.ynabmonthlyreport.scheduler.Scheduler.ScheduleReportOutcome;
-import com.ynabmonthlyreport.ynab.YnabFetcher;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDate;
+object Runner {
+  @JvmStatic
+  fun main(args: Array<String>) {
+    val config: YnabMonthlyReportConfig = loadConfig()
+    println("Generating report for ${config.budgetMonth}")
+    val ynabFetcher = YnabFetcher(config)
+    val scheduler = Scheduler(config, ynabFetcher)
 
-public class Runner {
-  public static void main(String args[]) {
-    YnabMonthlyReportConfig config = loadConfig();
-    if (config.budgetMonth == null) {
-      config.budgetMonth = LocalDate.now().minusMonths(1);
-      System.out.println("Month not specified in config; using " + config.budgetMonth);
+    val schedulerOutcome: Scheduler.ScheduleReportOutcome = scheduler.readyToScheduleReport()
+    if (schedulerOutcome != Scheduler.ScheduleReportOutcome.READY_TO_SCHEDULE) {
+      System.err.println("Not ready to schedule: $schedulerOutcome")
+      exitProcess(0)
     }
 
-    YnabFetcher ynabFetcher = new YnabFetcher(config.apiKey, config.budgetId, config.budgetMonth);
-    Scheduler scheduler = new Scheduler(config, ynabFetcher);
-    ScheduleReportOutcome schedulerOutcome = scheduler.readyToScheduleReport();
-    if (!ScheduleReportOutcome.READY_TO_SCHEDULE.equals(schedulerOutcome)) {
-      System.err.println("Not ready to schedule: " + schedulerOutcome);
-      System.exit(0);
+    val budgetMonth: BudgetMonthData = try {
+      ynabFetcher.fetchBudgetMonthData()
+    } catch (e: Exception) {
+      when (e) {
+        is IOException, is InterruptedException -> {
+          System.err.println("Failed to fetch YNAB budget month data: $e")
+          exitProcess(0)
+        }
+        else -> throw e
+      }
     }
+    println("Successfully fetched YNAB data!")
 
-    BudgetMonthData budgetMonth = null;
-    try {
-      budgetMonth = ynabFetcher.fetchBudgetMonthData();
-    } catch (IOException | InterruptedException e) {
-      System.err.println("Failed to fetch YNAB budget month data: " + e);
-      System.exit(0);
-    }
-    System.out.println("Successfully fetched YNAB data!");
+    val reportAssembler = ReportAssembler(config)
+    val report: String = reportAssembler.getAssembledReport(budgetMonth)
+    println(report)
 
-    ReportAssembler reportAssembler = new ReportAssembler(config);
-    String report = reportAssembler.getAssembledReport(budgetMonth);
-    System.out.println(report);
-    
     if (config.enableEmailReport) {
-      SendEmailTask emailTask = new SendEmailTask(config);
-      emailTask.sendEmail(report);
+      val emailTask = SendEmailTask(config)
+      emailTask.sendEmail(report)
     }
   }
 
-  private static YnabMonthlyReportConfig loadConfig() {
-    String configJson = null;
-    try {
-      configJson = new String(Files.readAllBytes(Paths.get(CONFIG_FILENAME)));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+  private fun loadConfig(): YnabMonthlyReportConfig {
+    return try {
+      val configJson = String(Files.readAllBytes(Paths.get(CONFIG_FILENAME)))
+      JsonConversionUtils.convertConfigJson(configJson)
+    } catch (e: IOException) {
+      throw RuntimeException(e)
     }
-    return JsonConversionUtils.convertConfigJson(configJson);
   }
 }

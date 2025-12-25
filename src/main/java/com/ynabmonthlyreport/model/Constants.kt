@@ -1,8 +1,8 @@
-package com.ynabmonthlyreport.model;
+package com.ynabmonthlyreport.model
 
-public class Constants {
-  public static final String CONFIG_FILENAME = "src/main/resources/ynab_monthly_report_config.json";
-  public static final String FAILURE_ICON = "\u274C"; // Red X
-  public static final String SUCCESS_ICON = "\u2705"; // Green check mark
-  public static final String QUESTION_ICON = "\u2753"; // Red question mark
+object Constants {
+  const val CONFIG_FILENAME: String = "src/main/resources/ynab_monthly_report_config.json"
+  const val FAILURE_ICON: String = "\u274C" // Red X
+  const val SUCCESS_ICON: String = "\u2705" // Green check mark
+  const val QUESTION_ICON: String = "\u2753" // Red question mark
 }
