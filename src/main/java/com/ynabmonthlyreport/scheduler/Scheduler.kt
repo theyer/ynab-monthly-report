@@ -31,7 +31,7 @@ class Scheduler(private val config: YnabMonthlyReportConfig, private val ynabFet
 
     return when {
       budgetMonth.toBeBudgeted != 0L -> ScheduleReportOutcome.TO_BE_BUDGETED_NOT_EMPTY
-      budgetMonth.categories.asSequence().filter { it.categoryGroupName in config.balanceZeroedMonthlyCategoryGroups }
+      budgetMonth.categories.asSequence().filter { it.categoryGroupName in config.monthlySpendingCategoryGroups }
         .any { it.balance != 0L } -> ScheduleReportOutcome.SPENDING_BALANCES_NOT_EMPTY
       budgetMonth.categories.asSequence().filter { it.name !in config.ignoredCategories }
         .any { it.balance < 0 } -> ScheduleReportOutcome.NEGATIVE_BALANCES

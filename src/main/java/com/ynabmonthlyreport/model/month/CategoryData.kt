@@ -22,8 +22,7 @@ data class CategoryData(
   val note: String?,
   @JsonDeserialize(using = LongCurrencyDeserializer::class) val budgeted: Long,
   @JsonDeserialize(using = LongCurrencyDeserializer::class) @get:LongModifier(multiplier = -1L) val activity: Long,
-  val balance: Long,
-  @JsonSetter(nulls = Nulls.SKIP) val goalType: GoalType = GoalType.NO_GOAL,
+  @JsonDeserialize(using = LongCurrencyDeserializer::class) val balance: Long,
   val goalNeedsWholeAmount: Boolean?,
   val goalDay: Long?,
   @JsonSetter(nulls = Nulls.SKIP) val goalCadence: GoalCadence = GoalCadence.NONE,
@@ -39,21 +38,6 @@ data class CategoryData(
   val goalSnoozedAt: Instant?,
   val deleted: Boolean?,
 ) {
-  enum class GoalType {
-    NO_GOAL,
-    TB,  // Target Category Balance
-    TBD,  // Target Category Balance by Date
-    MF,  // Monthly Funding
-    NEED,  // Plan Your Spending
-    DEBT;
-
-    companion object {
-      @JsonCreator
-      @JvmStatic
-      fun fromString(value: String?): GoalType = entries.find { it.name == value } ?: NO_GOAL
-    }
-  }
-
   // The goal_cadence field isn't always consistent w.r.t. monthly goals.
   // When goal_type is MF, it seems that the cadence for a monthly goal may be either MONTHLY or NONE.
   // When goal_type is NEED, monthly goals seem to always be MONTHLY.

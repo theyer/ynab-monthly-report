@@ -1,3 +1,4 @@
 bazel-*
 .eclipse/projects
+LLM
 src/main/resources/ynab_monthly_report_config.json

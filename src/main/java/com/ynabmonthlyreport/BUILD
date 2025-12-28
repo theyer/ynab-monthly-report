@@ -1,10 +1,9 @@
-load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
 
-kt_jvm_binary(
-    name = "runner",
+kt_jvm_library(
+    name = "runner_lib",
     srcs = ["Runner.kt"],
     data = ["//src/main/resources"],
-    main_class = "com.ynabmonthlyreport.Runner",
     deps = [
         "//src/main/java/com/ynabmonthlyreport/email",
         "//src/main/java/com/ynabmonthlyreport/model",
@@ -14,4 +13,10 @@ kt_jvm_binary(
         "//src/main/java/com/ynabmonthlyreport/scheduler",
         "//src/main/java/com/ynabmonthlyreport/ynab",
     ],
+)
+
+kt_jvm_binary(
+    name = "runner",
+    main_class = "com.ynabmonthlyreport.Runner",
+    runtime_deps = [":runner_lib"],
 )

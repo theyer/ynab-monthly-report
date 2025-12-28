@@ -6,12 +6,8 @@ import com.ynabmonthlyreport.model.config.YnabMonthlyReportConfig
 import com.ynabmonthlyreport.model.month.CategoryData
 import kotlin.math.abs
 
-internal class MonthlySpendingReportGenerator(config: YnabMonthlyReportConfig) : BaseReportGenerator(config) {
+internal object MonthlySpendingReportGenerator : BaseReportGenerator() {
   override val title = "------ Monthly Spending Report ------"
-
-  override fun filterCategory(category: CategoryData): Boolean {
-    return category.name !in config.savingsCategories && category.goalType == CategoryData.GoalType.NEED && category.goalTarget != 0L
-  }
 
   override fun generateSingleCategory(category: CategoryData): String {
     val spendUnderGoal = category.activity <= category.goalTarget

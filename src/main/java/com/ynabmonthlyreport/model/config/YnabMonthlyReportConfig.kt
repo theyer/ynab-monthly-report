@@ -11,7 +11,8 @@ data class YnabMonthlyReportConfig(
   val emailSendFromAddress: String,
   val emailSendFromPassword: String,
   val emailSendToAddresses: List<String>,
-  val balanceZeroedMonthlyCategoryGroups: List<String>,
-  val savingsCategories: List<String>,
-  val ignoredCategories: List<String>,
+  val monthlySpendingCategoryGroups: Set<String>,
+  val nonMonthlySpendingCategoryGroups: Set<String>,
+  val savingsCategoryGroups: Set<String>,
+  val ignoredCategories: Set<String>,
 )

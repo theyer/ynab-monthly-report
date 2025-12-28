@@ -7,8 +7,6 @@ bazel_dep(name = "rules_kotlin", version = "2.2.1")
 bazel_dep(name = "rules_jvm_external", version = "6.9")
 
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
-use_repo(maven, "maven")
-
 maven.install(
     artifacts = [
         "com.fasterxml.jackson.core:jackson-annotations:2.20",
@@ -18,7 +16,11 @@ maven.install(
         "tools.jackson.core:jackson-databind:3.0.3",
         "tools.jackson.module:jackson-module-kotlin:3.0.3",
     ],
+    fetch_sources = True,
     repositories = [
         "https://repo1.maven.org/maven2",
     ],
 )
+use_repo(maven, "maven")
+
+register_toolchains("//:kotlin_toolchain")
