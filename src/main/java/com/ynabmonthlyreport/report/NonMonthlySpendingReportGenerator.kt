@@ -12,7 +12,7 @@ internal object NonMonthlySpendingReportGenerator : BaseReportGenerator() {
   override fun generateSingleCategory(category: CategoryData): String {
     val details = getSpendingDetails(category)
     return String.format(
-        "%s %s: %s (Target: $%d, Budgeted: $%d, Spend: $%d, Balance: $%d)",
+        "%s %s: %s (Target: $%d, Budgeted: $%d, Spent: $%d, Balance: $%d)",
         details.icon,
         category.name,
         details.spendingMessage,

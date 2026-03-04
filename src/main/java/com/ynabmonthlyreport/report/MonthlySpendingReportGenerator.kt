@@ -16,7 +16,7 @@ internal object MonthlySpendingReportGenerator : BaseReportGenerator() {
     val icon: String = if (spendUnderGoal) SUCCESS_ICON else FAILURE_ICON
     val overOrUnder = if (spendUnderGoal) "under" else "over"
     return String.format(
-      "%s %s: $%d %s goal (Goal: $%d, Spend: $%d)",
+      "%s %s: $%d %s goal (Goal: $%d, Spent: $%d)",
       icon,
       category.name,
       spendDiff,

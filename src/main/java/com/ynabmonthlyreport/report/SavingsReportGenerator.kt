@@ -16,13 +16,14 @@ internal object SavingsReportGenerator : BaseReportGenerator() {
     val icon: String = if (budgetedToGoal) SUCCESS_ICON else FAILURE_ICON
     val overOrUnder = if (budgetedToGoal) "over" else "under"
     return String.format(
-      "%s %s: $%d %s goal (Goal: $%d, Budgeted: $%d)",
+      "%s %s: $%d %s goal (Goal: $%d, Budgeted: $%d, Balance: $%d)",
       icon,
       category.name,
       saveDiff,
       overOrUnder,
       category.goalTarget,
-      category.budgeted
+      category.budgeted,
+      category.balance
     )
   }
 }
