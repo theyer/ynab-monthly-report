@@ -20,6 +20,7 @@ data class CategoryData(
   val hidden: Boolean,
   val originalCategoryGroupId: String?,
   val note: String?,
+  val goalType: String?,
   @JsonDeserialize(using = LongCurrencyDeserializer::class) val budgeted: Long,
   @JsonDeserialize(using = LongCurrencyDeserializer::class) @get:LongModifier(multiplier = -1L) val activity: Long,
   @JsonDeserialize(using = LongCurrencyDeserializer::class) val balance: Long,
@@ -32,12 +33,15 @@ data class CategoryData(
   val goalTargetMonth: LocalDate?,
   val goalPercentageComplete: Long?,
   val goalMonthsToBudget: Long?,
-  val goalUnderFunded: Long?,
-  val goalOverallFunded: Long?,
-  val goalOverallLeft: Long?,
+  @JsonDeserialize(using = LongCurrencyDeserializer::class) val goalUnderFunded: Long?,
+  @JsonDeserialize(using = LongCurrencyDeserializer::class) val goalOverallFunded: Long?,
+  @JsonDeserialize(using = LongCurrencyDeserializer::class) val goalOverallLeft: Long?,
   val goalSnoozedAt: Instant?,
   val deleted: Boolean?,
 ) {
+  val hasMonthlyTarget: Boolean
+    get() = (goalCadence == GoalCadence.MONTHLY && (goalCadenceFrequency == 1L || goalCadenceFrequency == null)) || goalType == "MF"
+
   // The goal_cadence field isn't always consistent w.r.t. monthly goals.
   // When goal_type is MF, it seems that the cadence for a monthly goal may be either MONTHLY or NONE.
   // When goal_type is NEED, monthly goals seem to always be MONTHLY.
