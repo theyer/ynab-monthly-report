@@ -6,6 +6,7 @@ kt_jvm_library(
     visibility = ["//src/main/java/com/ynabmonthlyreport:__pkg__"],
     deps = [
         "//src/main/java/com/ynabmonthlyreport/model/config",
+        "//src/main/java/com/ynabmonthlyreport/report",
         "@maven//:com_sun_mail_javax_mail",
     ],
 )

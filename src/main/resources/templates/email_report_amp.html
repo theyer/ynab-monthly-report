@@ -1,0 +1,537 @@
+<!doctype html>
+<html ⚡4email data-css-strict>
+<head>
+  <meta charset="utf-8">
+  <script async src="https://cdn.ampproject.org/v0.js"></script>
+  <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+  <style amp4email-boilerplate>body{visibility:hidden}</style>
+  <style amp-custom>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 16px 8px;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+    }
+    .header-sub {
+      font-size: 12px;
+      color: #64748b;
+      margin: 2px 0 0;
+    }
+    .ynab-btn {
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffffff;
+      background-color: #2563eb;
+      padding: 6px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .note-box {
+      margin: 16px 20px 0;
+      padding: 10px 14px;
+      background: #f1f5f9;
+      border-left: 3px solid #64748b;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #334155;
+    }
+    .kpi-grid {
+      display: flex;
+      gap: 10px;
+      padding: 16px 20px;
+    }
+    .kpi-card {
+      flex: 1;
+      padding: 12px 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .kpi-card-alert {
+      background: #fff1f2;
+      border-color: #fecdd3;
+    }
+    .kpi-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .kpi-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 2px 0;
+    }
+    .kpi-val-alert {
+      color: #e11d48;
+    }
+    .kpi-sub {
+      font-size: 11px;
+      color: #64748b;
+    }
+    .alert-banner {
+      margin: 0 20px 16px;
+      padding: 12px 14px;
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      border-radius: 10px;
+      font-size: 12px;
+      color: #9f1239;
+    }
+    .alert-banner strong {
+      display: block;
+      margin-bottom: 3px;
+      font-weight: 700;
+    }
+    .section-box {
+      margin: 0 20px 20px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .section-header {
+      background: #f8fafc;
+      padding: 10px 16px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    /* Accordion styles */
+    amp-accordion section {
+      border-bottom: 1px solid #f1f5f9;
+    }
+    amp-accordion section:last-child {
+      border-bottom: none;
+    }
+    amp-accordion header {
+      background: #ffffff;
+      padding: 12px 16px;
+      cursor: pointer;
+      border: none;
+      outline: none;
+    }
+    .cat-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .cat-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .cat-meta {
+      font-size: 11px;
+      color: #64748b;
+      margin-left: 6px;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      display: inline-block;
+    }
+    .badge-over {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+    .badge-under {
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .badge-exact {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .progress-track {
+      background: #f1f5f9;
+      height: 6px;
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .progress-fill-over {
+      background: #ef4444;
+      height: 6px;
+      border-radius: 9999px;
+    }
+    .progress-fill-under {
+      background: #10b981;
+      height: 6px;
+      border-radius: 9999px;
+    }
+    .progress-fill-exact {
+      background: #3b82f6;
+      height: 6px;
+      border-radius: 9999px;
+    }
+    .cat-footer-sub {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    /* Expanded transactions table */
+    .tx-container {
+      background: #f8fafc;
+      padding: 10px 16px 14px;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 11px;
+    }
+    .tx-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .tx-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .tx-table td {
+      padding: 4px 0;
+      vertical-align: top;
+      border-bottom: 1px solid #eef2f6;
+    }
+    .tx-date {
+      width: 55px;
+      color: #64748b;
+    }
+    .tx-payee {
+      color: #0f172a;
+      font-weight: 500;
+    }
+    .tx-memo {
+      font-size: 10px;
+      color: #94a3b8;
+      display: block;
+    }
+    .tx-amount {
+      text-align: right;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    /* Sinking fund table */
+    .table-sinking {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .table-sinking th {
+      background: #f8fafc;
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .table-sinking td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .text-right {
+      text-align: right;
+    }
+    .footer {
+      padding: 16px 20px 24px;
+      text-align: center;
+      font-size: 11px;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+    }
+    .footer a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    
+    <!-- Header -->
+    <div class="header">
+      <div>
+        <h1 class="header-title">Monthly Budget Report</h1>
+        <p class="header-sub">{{ model.monthTitle }} • High Kings Financial Report</p>
+      </div>
+      <div>
+        <a href="{{ model.ynabWebUrl }}" target="_blank" class="ynab-btn">Open in YNAB ↗</a>
+      </div>
+    </div>
+
+    <!-- Notes if present -->
+    {% if model.note %}
+    <div class="note-box">
+      <strong>Month Notes:</strong> {{ model.note }}
+    </div>
+    {% endif %}
+
+    <!-- KPI Summary Grid -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Spent</div>
+        <div class="kpi-val">${{ model.kpiSummary.totalSpentFormatted }}</div>
+        <div class="kpi-sub">Target: ${{ model.kpiSummary.totalBudgetFormatted }}</div>
+      </div>
+      <div class="kpi-card {% if model.kpiSummary.isNetOver %}kpi-card-alert{% endif %}">
+        <div class="kpi-label">Net Variance</div>
+        <div class="kpi-val {% if model.kpiSummary.isNetOver %}kpi-val-alert{% endif %}">
+          {% if model.kpiSummary.isNetOver %}+{% endif %}${{ model.kpiSummary.netVarianceFormatted }}
+        </div>
+        <div class="kpi-sub">{% if model.kpiSummary.isNetOver %}Over budget{% else %}Under budget{% endif %}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Health Score</div>
+        <div class="kpi-val">{{ model.kpiSummary.monthlyOnTrackCount }}/{{ model.kpiSummary.monthlyTotalCount }}</div>
+        <div class="kpi-sub">{{ model.kpiSummary.monthlyHealthPercent }}% on track</div>
+      </div>
+    </div>
+
+    <!-- Attention Needed Callout -->
+    {% if model.attentionCategories is not empty %}
+    <div class="alert-banner">
+      <strong>⚠️ Attention Needed ({{ model.attentionCategories.size() }} Categories Over Goal):</strong>
+      Top overspends:
+      {% for att in model.attentionCategories %}
+        {{ att.name }} (+${{ att.diffFormatted }}){% if not loop.last %}, {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- SECTION 1: Monthly Spending -->
+    <div class="section-box">
+      <div class="section-header">
+        <span>Monthly Spending Categories</span>
+        <span>Tap to view top transactions</span>
+      </div>
+
+      <amp-accordion expand-single-section animate>
+        {% for cat in model.monthlyCategories %}
+        <section>
+          <header>
+            <div class="cat-head">
+              <div>
+                <span class="cat-name">{{ cat.name }}</span>
+                <span class="cat-meta">Spent ${{ cat.activityFormatted }} of ${{ cat.goalTargetFormatted }}</span>
+              </div>
+              <div>
+                <span class="badge badge-{{ cat.statusClass }}">{{ cat.statusBadgeText }}</span>
+              </div>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill-{{ cat.statusClass }}" style="width: {{ cat.progressBarWidthPercent }}%;"></div>
+            </div>
+            <div class="cat-footer-sub">
+              <span>{{ cat.percentUsed }}% of goal</span>
+              <span>{% if cat.hasTransactions %}▶ Top transactions{% else %}No expenses{% endif %}</span>
+            </div>
+          </header>
+          <div class="tx-container">
+            {% if cat.hasTransactions %}
+            <div class="tx-title">Top Transactions</div>
+            <table class="tx-table">
+              {% for tx in cat.topTransactions %}
+              <tr>
+                <td class="tx-date">{{ tx.date }}</td>
+                <td>
+                  <span class="tx-payee">{{ tx.payee }}</span>
+                  {% if tx.memo %}<span class="tx-memo">{{ tx.memo }}</span>{% endif %}
+                </td>
+                <td class="tx-amount">{{ tx.amountFormatted }}</td>
+              </tr>
+              {% endfor %}
+            </table>
+            {% else %}
+            <div style="color: #94a3b8; font-style: italic;">No expenses recorded for this category.</div>
+            {% endif %}
+          </div>
+        </section>
+        {% endfor %}
+      </amp-accordion>
+    </div>
+
+    <!-- SECTION 2: Sinking Funds / Non-Monthly -->
+    <div class="section-box">
+      <div class="section-header">
+        <span>Sinking Funds & Non-Monthly</span>
+        <span>Tap to view expenses</span>
+      </div>
+
+      <amp-accordion expand-single-section animate>
+        {% for fund in model.sinkingFunds %}
+        <section>
+          <header>
+            <div class="cat-head">
+              <div>
+                <span class="cat-name">{{ fund.name }}</span>
+                <span class="cat-meta">Budgeted: ${{ fund.budgetedFormatted }} | Spent: ${{ fund.activityFormatted }}</span>
+              </div>
+              <div>
+                <span class="badge {% if fund.statusType == 'on-track' %}badge-under{% else %}badge-over{% endif %}">
+                  {{ fund.statusMessage }}
+                </span>
+              </div>
+            </div>
+            <div class="cat-footer-sub">
+              <span>Target: ${{ fund.targetFormatted }}</span>
+              <span>Available Balance: <strong>${{ fund.balanceFormatted }}</strong> {% if fund.hasTransactions %}▶{% endif %}</span>
+            </div>
+          </header>
+          <div class="tx-container">
+            {% if fund.hasTransactions %}
+            <div class="tx-title">Transactions This Month</div>
+            <table class="tx-table">
+              {% for tx in fund.topTransactions %}
+              <tr>
+                <td class="tx-date">{{ tx.date }}</td>
+                <td>
+                  <span class="tx-payee">{{ tx.payee }}</span>
+                  {% if tx.memo %}<span class="tx-memo">{{ tx.memo }}</span>{% endif %}
+                </td>
+                <td class="tx-amount">{{ tx.amountFormatted }}</td>
+              </tr>
+              {% endfor %}
+            </table>
+            {% else %}
+            <div style="color: #94a3b8; font-style: italic;">No spending this month.</div>
+            {% endif %}
+          </div>
+        </section>
+        {% endfor %}
+      </amp-accordion>
+    </div>
+
+    <!-- SECTION 3: Savings Goals -->
+    {% if model.savingsCategories is not empty %}
+    <div class="section-box">
+      <div class="section-header">
+        <span>Savings & Long-Term Goals</span>
+        <span>Balance Overview</span>
+      </div>
+      <table class="table-sinking">
+        <thead>
+          <tr>
+            <th>Goal</th>
+            <th class="text-right">Budgeted</th>
+            <th class="text-right">Balance</th>
+            <th class="text-right">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sav in model.savingsCategories %}
+          <tr>
+            <td><strong>{{ sav.name }}</strong></td>
+            <td class="text-right">${{ sav.budgetedFormatted }}</td>
+            <td class="text-right"><strong>${{ sav.balanceFormatted }}</strong></td>
+            <td class="text-right">
+              <span class="badge {% if sav.isOverOrMet %}badge-under{% else %}badge-over{% endif %}">
+                {{ sav.statusBadgeText }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+
+    <!-- SECTION 4: Misc & Irregular Spending -->
+    <div class="section-box">
+      <div class="section-header">
+        <span>Misc & Ad-Hoc Spending</span>
+        <span>Categories without fixed targets</span>
+      </div>
+
+      {% if model.miscActiveCategories is not empty %}
+      <amp-accordion expand-single-section animate>
+        {% for misc in model.miscActiveCategories %}
+        <section>
+          <header>
+            <div class="cat-head">
+              <span class="cat-name">{{ misc.name }}</span>
+              <span class="badge badge-over">${{ misc.activityFormatted }} spent</span>
+            </div>
+            <div class="cat-footer-sub">
+              <span>Ad-hoc expense</span>
+              <span>{% if misc.hasTransactions %}▶ Top transactions{% endif %}</span>
+            </div>
+          </header>
+          <div class="tx-container">
+            {% if misc.hasTransactions %}
+            <div class="tx-title">Top Transactions</div>
+            <table class="tx-table">
+              {% for tx in misc.topTransactions %}
+              <tr>
+                <td class="tx-date">{{ tx.date }}</td>
+                <td>
+                  <span class="tx-payee">{{ tx.payee }}</span>
+                  {% if tx.memo %}<span class="tx-memo">{{ tx.memo }}</span>{% endif %}
+                </td>
+                <td class="tx-amount">{{ tx.amountFormatted }}</td>
+              </tr>
+              {% endfor %}
+            </table>
+            {% endif %}
+          </div>
+        </section>
+        {% endfor %}
+      </amp-accordion>
+      {% endif %}
+
+      {% if model.miscZeroCategories is not empty %}
+      <div style="padding: 10px 16px; background: #fafafa; border-top: 1px solid #f1f5f9; font-size: 11px; color: #94a3b8;">
+        <strong>$0 Spent:</strong>
+        {% for z in model.miscZeroCategories %}
+          {{ z.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Automated with Kotlin & YNAB API • Generated for High Kings</p>
+      <p><a href="{{ model.ynabWebUrl }}" target="_blank">Open Full Budget in YNAB Web ↗</a></p>
+    </div>
+
+  </div>
+</body>
+</html>
